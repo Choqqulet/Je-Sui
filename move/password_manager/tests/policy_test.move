@@ -87,7 +87,6 @@ module password_manager::policy_test {
         //
         // 6) Execute (owner)
         //
-        // 6) Execute (owner)
         sc.next_tx(owner);
         let op_final = sc.take_from_sender<policy::PendingOp>();
         policy::execute(op_final, &p, &mut v, &clk, sc.ctx());
