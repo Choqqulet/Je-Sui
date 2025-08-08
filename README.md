@@ -21,7 +21,7 @@ This project is a **decentralized password manager** built for the Sui Hackathon
 - [x] GitHub repo ready  
 - [x] Frontend scaffold created (Vite + React/TS)  
 - [x] Dockerfile for production build and serving compiled  
-- [ ] Move contract stubbed (Vault struct, create/update flows)  
+- [x] Move contract stubbed (Vault struct, create/update flows)  
 - [ ] zkLogin hook and Walrus client logic pending  
 - [ ] Seal integration: import, APIs, and Move check logic still testing  
 - [ ] Full end-to-end flow yet to be validated  
