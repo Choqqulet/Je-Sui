@@ -63,10 +63,10 @@ npm run dev
 ## 👥 Contributing & Team
 
 ### **Team Roles**
-- **Chloe** — Architecture, frontend + Docker  
+- **Chloe** — Architecture, deploy
 - **Jishnuu** — Move + Seal integration  
-- **Wei Lun** — UX/UI, vault manager  
-- **Evan** — Presentation, documentation, pitch deck  
+- **Wei Lun** — frontend, vault manager  
+- **Evan** — Presentation, UX/UI, pitch deck  
 
 ### **Contribution Guide**
 1. Claim an issue from the [**Issues**](../../issues) tab.  
