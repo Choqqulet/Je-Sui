@@ -26,7 +26,6 @@ This project is a **decentralized password manager** built for the Sui Hackathon
 - [ ] Seal integration: import, APIs, and Move check logic still testing  
 - [ ] Full end-to-end flow yet to be validated  
 
----
 
 ## 🛠️ Architecture
 
@@ -34,7 +33,6 @@ This project is a **decentralized password manager** built for the Sui Hackathon
 
 User → zkLogin → Seal Encryption → Walrus Storage → Vault Object on Sui
 
----
 
 ## 🚀 Getting Started
 
@@ -62,18 +60,18 @@ npm run dev
 | **Phase 3 — UI/UX** | User-friendly vault manager + error handling |
 | **Phase 4 — Deploy** | Publish contracts to Sui Devnet & deploy frontend |
 
-## 👤 Contributing & Team
+## 👥 Contributing & Team
 
-Team Roles:
-	•	Chloe — Architecture, frontend + Docker
-	•	Jishnuu — Move + Seal integration
-	•	Wei Lun — UX/UI, vault manager
-	•	Evan — Presentation, documentation, pitch deck
+### **Team Roles**
+- **Chloe** — Architecture, frontend + Docker  
+- **Jishnuu** — Move + Seal integration  
+- **Wei Lun** — UX/UI, vault manager  
+- **Evan** — Presentation, documentation, pitch deck  
 
-How to help:
-	•	Claim an issue or task from the Issues tab
-	•	Sync via GitHub Projects using milestones (“MVP”, “Seal Phase”, “Demo Day”)
-	•	Raise new issues for missing flow or enhancements
+### **Contribution Guide**
+1. Claim an issue from the [**Issues**](../../issues) tab.  
+2. Track progress via the [**Projects**](../../projects) board.  
+3. Open PRs with clear descriptions of changes.
 
 ## 📜 License
 
