@@ -27,22 +27,47 @@ This project is a **decentralized password manager** built for the Sui Hackathon
 - [ ] Full end-to-end flow yet to be validated  
 
 
-## 🛠️ Architecture
+## 🛠️ Technical Architecture
 
-```bash
-+-------------+       +--------------------+       +-------------+
-|  Frontend   | <---> |  Sui Move Modules   | <---> |   Walrus    |
-|  React/Vite |       |  vault + policy     |       | Blob Storage|
-+-------------+       +--------------------+       +-------------+
-       |                          |
-       | zkLogin                  |
-       v                          v
-  Browser Wallet             Guardian Approvals
+### **System Flow:**
+
+<img width="516" height="747" alt="image" src="https://github.com/user-attachments/assets/b3b2d750-997e-4584-bbe1-e8f6e4bf5c0d" />
+
+### **Security Architecture:**
+
+### Threat Model
+
+1. **Network Attacks**
+    - Mitigation: End-to-end encryption, TLS for all communications
+2. **Smart Contract Vulnerabilities**
+    - Mitigation: Formal verification, security audits, upgrade mechanisms
+3. **Client-side Attacks**
+    - Mitigation: CSP headers, SRI for dependencies, secure key storage
+
+### Encryption Scheme
+
+```
+Master Key Derivation:
+zkProof + User Salt → Argon2id → Master Key
+
+Per-Entry Encryption:
+Master Key + Entry ID → HKDF → Entry Key
+Entry Key + Plaintext → AES-256-GCM → Ciphertext
 ```
 
-**System Flow:**
+### Access Control Matrix
 
-User → zkLogin → Seal Encryption → Walrus Storage → Vault Object on Sui
+| Action | Owner | Authorized User | Public |
+| --- | --- | --- | --- |
+| Create Vault | ✓ | ✗ | ✗ |
+| Read Entries | ✓ | ✓* | ✗ |
+| Add Entry | ✓ | ✗ | ✗ |
+| Update Entry | ✓ | ✗ | ✗ |
+| Delete Entry | ✓ | ✗ | ✗ |
+| Share Access | ✓ | ✗ | ✗ |
+- With explicit permission via Seal capability
+
+--- 
 
 ## 🚀 Getting Started
 
@@ -51,8 +76,6 @@ User → zkLogin → Seal Encryption → Walrus Storage → Vault Object on Sui
 - **Docker** installed
 - **Sui CLI** installed (`sui move build`, `sui client publish`)
 - Access to **Sui Devnet/Testnet** faucet ([https://faucet.sui.io](https://faucet.sui.io))
-
----
 
 ### 🖥️ Frontend 
 ```bash
@@ -69,6 +92,8 @@ VITE_PACKAGE_ID=<your_published_package_id>
 ### Move Contracts
 
 Docs are in /move/password_manager/README.md.
+
+---
 
 ## 🗺️ Roadmap & Tasks
 
