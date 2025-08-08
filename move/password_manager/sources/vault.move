@@ -2,6 +2,8 @@ module password_manager::vault {
     use sui::object::{UID, new};
     use sui::tx_context::{TxContext, sender};
     use sui::transfer;
+    use password_manager::seal;
+
 
     public struct Vault has key, store {
         id: UID,
