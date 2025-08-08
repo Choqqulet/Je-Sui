@@ -1,4 +1,5 @@
 module password_manager::vault {
+    use sui::event;
     use sui::object::{UID, new};
     use sui::tx_context::{TxContext, sender};
     use sui::transfer;

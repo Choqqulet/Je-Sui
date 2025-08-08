@@ -1,4 +1,5 @@
 module password_manager::policy {
+    use sui::event;
     use sui::object::new;
     use sui::tx_context::{TxContext, sender};
     use sui::transfer::public_transfer;
