@@ -4,7 +4,6 @@ module password_manager::vault {
     use sui::transfer;
     use password_manager::seal;
 
-
     public struct Vault has key, store {
         id: UID,
         owner: address,
@@ -17,8 +16,8 @@ module password_manager::vault {
         transfer::transfer(v, sender(ctx));
     }
 
-    public entry fun update_vault(v: &mut Vault, new_blob_id: vector<u8>, ctx: &TxContext) {
-        assert!(v.owner == sender(ctx), 0);
+    public entry fun update_vault(v: &mut Vault, new_blob_id: vector<u8>, s: &seal::Seal, ctx: &TxContext) {
+        seal::assert_owner(s, sender(ctx));
         v.blob_id = new_blob_id;
     }
 
