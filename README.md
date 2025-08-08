@@ -29,10 +29,20 @@ This project is a **decentralized password manager** built for the Sui Hackathon
 
 ## 🛠️ Architecture
 
+```bash
++-------------+       +--------------------+       +-------------+
+|  Frontend   | <---> |  Sui Move Modules   | <---> |   Walrus    |
+|  React/Vite |       |  vault + policy     |       | Blob Storage|
++-------------+       +--------------------+       +-------------+
+       |                          |
+       | zkLogin                  |
+       v                          v
+  Browser Wallet             Guardian Approvals
+```
+
 **System Flow:**
 
 User → zkLogin → Seal Encryption → Walrus Storage → Vault Object on Sui
-
 
 ## 🚀 Getting Started
 
@@ -44,12 +54,21 @@ User → zkLogin → Seal Encryption → Walrus Storage → Vault Object on Sui
 
 ---
 
-### 🖥️ Frontend Setup
+### 🖥️ Frontend 
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+set environment variables in frontend/.env
+```bash
+VITE_SUI_NETWORK=testnet
+VITE_PACKAGE_ID=<your_published_package_id>
+```
+
+### Move Contracts
+
+Docs are in /move/password_manager/README.md.
 
 ## 🗺️ Roadmap & Tasks
 
