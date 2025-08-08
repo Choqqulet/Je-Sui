@@ -1,4 +1,4 @@
-# Je-Sui — On-Chain Password Manager (Sui + zkLogin + Seal + Walrus)
+# Je-Sui — On-Chain Password Manager
 
 **Experimenting with decentralized, walletless credentials storage — powered by Sui, zkLogin, Seal, and Walrus.**
 
