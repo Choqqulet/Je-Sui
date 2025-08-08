@@ -34,7 +34,6 @@ This project is a **decentralized password manager** built for the Sui Hackathon
 
 **System Flow:**
 
-```mermaid
 graph TB
   A[User (email login via zkLogin)] --> B[Frontend (React)]
   B --> C[Walrus: encrypt & write blob → blobId]
