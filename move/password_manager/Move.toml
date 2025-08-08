@@ -4,7 +4,6 @@ edition = "2024.beta"
 
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", rev = "testnet-v1.52.1", subdir = "crates/sui-framework/packages/sui-framework" }
-seal = { git = "https://github.com/MystenLabs/seal.git", rev = "main", subdir = "move/seal" }
 
 [addresses]
 password_manager = "0x0"
