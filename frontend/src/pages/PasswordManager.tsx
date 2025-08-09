@@ -1,22 +1,39 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "../components/ui/button"
-import { Input } from "../components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
-import { Badge } from "../components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
+import { useState } from "react";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../components/ui/dialog"
-import { Label } from "../components/ui/label"
-import { Textarea } from "../components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
+} from "../components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
+import { Label } from "../components/ui/label";
+import { Textarea } from "../components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 import {
   Search,
   Plus,
@@ -38,18 +55,20 @@ import {
   Edit,
   Trash2,
   Heart,
-} from "lucide-react"
+} from "lucide-react";
 
 export default function Component() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [showPassword, setShowPassword] = useState<{ [key: string]: boolean }>({})
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [openTagDropdown, setOpenTagDropdown] = useState<string | null>(null)
-  const [showCategoriesModal, setShowCategoriesModal] = useState(false)
-  const [showAddPasswordModal, setShowAddPasswordModal] = useState(false)
-  const [showFavorites, setShowFavorites] = useState(false)
-  const [editingCategory, setEditingCategory] = useState<string | null>(null)
-  const [editCategoryName, setEditCategoryName] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showPassword, setShowPassword] = useState<{ [key: string]: boolean }>(
+    {}
+  );
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [openTagDropdown, setOpenTagDropdown] = useState<string | null>(null);
+  const [showCategoriesModal, setShowCategoriesModal] = useState(false);
+  const [showAddPasswordModal, setShowAddPasswordModal] = useState(false);
+  const [showFavorites, setShowFavorites] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<string | null>(null);
+  const [editCategoryName, setEditCategoryName] = useState("");
   const [newPasswordData, setNewPasswordData] = useState({
     name: "",
     username: "",
@@ -58,12 +77,13 @@ export default function Component() {
     category: "",
     tags: [] as string[],
     notes: "",
-  })
-  const [tagSearchQuery, setTagSearchQuery] = useState("")
-  const [showNotesModal, setShowNotesModal] = useState(false)
-  const [editingNotes, setEditingNotes] = useState({ id: "", content: "" })
-  const [showPasswordGeneratorModal, setShowPasswordGeneratorModal] = useState(false)
-  const [generatedPassword, setGeneratedPassword] = useState("")
+  });
+  const [tagSearchQuery, setTagSearchQuery] = useState("");
+  const [showNotesModal, setShowNotesModal] = useState(false);
+  const [editingNotes, setEditingNotes] = useState({ id: "", content: "" });
+  const [showPasswordGeneratorModal, setShowPasswordGeneratorModal] =
+    useState(false);
+  const [generatedPassword, setGeneratedPassword] = useState("");
   const [passwordOptions, setPasswordOptions] = useState({
     length: 16,
     alphabets: 8,
@@ -71,7 +91,7 @@ export default function Component() {
     symbols: 4,
     complexity: "medium",
     useRandom: false,
-  })
+  });
 
   const passwords = [
     {
@@ -86,7 +106,8 @@ export default function Component() {
       lastUsed: "2 hours ago",
       strength: "Strong",
       isFavorite: true,
-      notes: "Main wallet for DeFi transactions. Recovery phrase stored in hardware wallet.",
+      notes:
+        "Main wallet for DeFi transactions. Recovery phrase stored in hardware wallet.",
     },
     {
       id: "2",
@@ -114,7 +135,8 @@ export default function Component() {
       lastUsed: "3 hours ago",
       strength: "Strong",
       isFavorite: true,
-      notes: "Primary email account. 2FA enabled with phone number +1-555-0123.",
+      notes:
+        "Primary email account. 2FA enabled with phone number +1-555-0123.",
     },
     {
       id: "4",
@@ -128,28 +150,125 @@ export default function Component() {
       lastUsed: "5 hours ago",
       strength: "Medium",
       isFavorite: false,
-      notes: "DEX for token swapping. Liquidity pool: ETH/USDC. Slippage tolerance: 0.5%",
+      notes:
+        "DEX for token swapping. Liquidity pool: ETH/USDC. Slippage tolerance: 0.5%",
     },
-  ]
+  ];
 
   const [categories, setCategories] = useState([
-    { value: "all", label: "All Items", count: 4, icon: "📁", color: "bg-gray-100" },
-    { value: "web3", label: "Web3", count: 3, icon: "🌐", color: "bg-blue-100" },
-    { value: "email", label: "Email", count: 1, icon: "📧", color: "bg-green-100" },
-    { value: "social", label: "Social", count: 0, icon: "👥", color: "bg-purple-100" },
-    { value: "work", label: "Work", count: 0, icon: "💼", color: "bg-orange-100" },
-    { value: "finance", label: "Finance", count: 0, icon: "💰", color: "bg-yellow-100" },
-    { value: "shopping", label: "Shopping", count: 0, icon: "🛒", color: "bg-pink-100" },
-    { value: "entertainment", label: "Entertainment", count: 0, icon: "🎬", color: "bg-red-100" },
-    { value: "gaming", label: "Gaming", count: 0, icon: "🎮", color: "bg-indigo-100" },
-    { value: "education", label: "Education", count: 0, icon: "📚", color: "bg-teal-100" },
-    { value: "health", label: "Health", count: 0, icon: "🏥", color: "bg-emerald-100" },
-    { value: "travel", label: "Travel", count: 0, icon: "✈️", color: "bg-cyan-100" },
-    { value: "news", label: "News", count: 0, icon: "📰", color: "bg-slate-100" },
-    { value: "utilities", label: "Utilities", count: 0, icon: "⚡", color: "bg-amber-100" },
-    { value: "government", label: "Government", count: 0, icon: "🏛️", color: "bg-stone-100" },
-    { value: "personal", label: "Personal", count: 0, icon: "👤", color: "bg-rose-100" },
-  ])
+    {
+      value: "all",
+      label: "All Items",
+      count: 4,
+      icon: "📁",
+      color: "bg-gray-100",
+    },
+    {
+      value: "web3",
+      label: "Web3",
+      count: 3,
+      icon: "🌐",
+      color: "bg-blue-100",
+    },
+    {
+      value: "email",
+      label: "Email",
+      count: 1,
+      icon: "📧",
+      color: "bg-green-100",
+    },
+    {
+      value: "social",
+      label: "Social",
+      count: 0,
+      icon: "👥",
+      color: "bg-purple-100",
+    },
+    {
+      value: "work",
+      label: "Work",
+      count: 0,
+      icon: "💼",
+      color: "bg-orange-100",
+    },
+    {
+      value: "finance",
+      label: "Finance",
+      count: 0,
+      icon: "💰",
+      color: "bg-yellow-100",
+    },
+    {
+      value: "shopping",
+      label: "Shopping",
+      count: 0,
+      icon: "🛒",
+      color: "bg-pink-100",
+    },
+    {
+      value: "entertainment",
+      label: "Entertainment",
+      count: 0,
+      icon: "🎬",
+      color: "bg-red-100",
+    },
+    {
+      value: "gaming",
+      label: "Gaming",
+      count: 0,
+      icon: "🎮",
+      color: "bg-indigo-100",
+    },
+    {
+      value: "education",
+      label: "Education",
+      count: 0,
+      icon: "📚",
+      color: "bg-teal-100",
+    },
+    {
+      value: "health",
+      label: "Health",
+      count: 0,
+      icon: "🏥",
+      color: "bg-emerald-100",
+    },
+    {
+      value: "travel",
+      label: "Travel",
+      count: 0,
+      icon: "✈️",
+      color: "bg-cyan-100",
+    },
+    {
+      value: "news",
+      label: "News",
+      count: 0,
+      icon: "📰",
+      color: "bg-slate-100",
+    },
+    {
+      value: "utilities",
+      label: "Utilities",
+      count: 0,
+      icon: "⚡",
+      color: "bg-amber-100",
+    },
+    {
+      value: "government",
+      label: "Government",
+      count: 0,
+      icon: "🏛️",
+      color: "bg-stone-100",
+    },
+    {
+      value: "personal",
+      label: "Personal",
+      count: 0,
+      icon: "👤",
+      color: "bg-rose-100",
+    },
+  ]);
 
   const availableTags = [
     "DeFi",
@@ -168,65 +287,74 @@ export default function Component() {
     "Finance",
     "Swap",
     "Liquidity",
-  ]
+  ];
 
   const filteredPasswords = passwords.filter((password) => {
     const matchesSearch =
       password.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      password.username.toLowerCase().includes(searchQuery.toLowerCase())
+      password.username.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory =
-      selectedCategory === "all" || password.category.toLowerCase() === selectedCategory.toLowerCase()
-    const matchesFavorites = !showFavorites || password.isFavorite
-    return matchesSearch && matchesCategory && matchesFavorites
-  })
+      selectedCategory === "all" ||
+      password.category.toLowerCase() === selectedCategory.toLowerCase();
+    const matchesFavorites = !showFavorites || password.isFavorite;
+    return matchesSearch && matchesCategory && matchesFavorites;
+  });
 
   const togglePasswordVisibility = (id: string) => {
-    setShowPassword((prev) => ({ ...prev, [id]: !prev[id] }))
-  }
+    setShowPassword((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
-  }
+    navigator.clipboard.writeText(text);
+  };
 
   const handleTagToggle = (passwordId: string, tag: string) => {
     // This would update the password's tags in a real app
-    console.log(`Toggle tag "${tag}" for password ${passwordId}`)
-  }
+    console.log(`Toggle tag "${tag}" for password ${passwordId}`);
+  };
 
   const handleCategorySelect = (categoryValue: string) => {
-    setSelectedCategory(categoryValue)
-    setShowCategoriesModal(false)
-    setShowFavorites(false)
-  }
+    setSelectedCategory(categoryValue);
+    setShowCategoriesModal(false);
+    setShowFavorites(false);
+  };
 
   const handleNewPasswordTagToggle = (tag: string) => {
     setNewPasswordData((prev) => ({
       ...prev,
-      tags: prev.tags.includes(tag) ? prev.tags.filter((t) => t !== tag) : [...prev.tags, tag],
-    }))
-  }
+      tags: prev.tags.includes(tag)
+        ? prev.tags.filter((t) => t !== tag)
+        : [...prev.tags, tag],
+    }));
+  };
 
   const handleEditCategory = (categoryValue: string, currentName: string) => {
-    setEditingCategory(categoryValue)
-    setEditCategoryName(currentName)
-  }
+    setEditingCategory(categoryValue);
+    setEditCategoryName(currentName);
+  };
 
   const handleSaveCategory = () => {
     setCategories((prev) =>
-      prev.map((cat) => (cat.value === editingCategory ? { ...cat, label: editCategoryName } : cat)),
-    )
-    setEditingCategory(null)
-    setEditCategoryName("")
-  }
+      prev.map((cat) =>
+        cat.value === editingCategory
+          ? { ...cat, label: editCategoryName }
+          : cat
+      )
+    );
+    setEditingCategory(null);
+    setEditCategoryName("");
+  };
 
   const handleDeleteCategory = (categoryValue: string) => {
     if (categoryValue !== "all") {
-      setCategories((prev) => prev.filter((cat) => cat.value !== categoryValue))
+      setCategories((prev) =>
+        prev.filter((cat) => cat.value !== categoryValue)
+      );
       if (selectedCategory === categoryValue) {
-        setSelectedCategory("all")
+        setSelectedCategory("all");
       }
     }
-  }
+  };
 
   const handleAddNewCategory = () => {
     const newCategory = {
@@ -235,120 +363,143 @@ export default function Component() {
       count: 0,
       icon: "📁",
       color: "bg-gray-100",
-    }
-    setCategories((prev) => [...prev, newCategory])
-  }
+    };
+    setCategories((prev) => [...prev, newCategory]);
+  };
 
   const getSortedTags = (appliedTags: string[]) => {
-    const applied = availableTags.filter((tag) => appliedTags.includes(tag))
-    const notApplied = availableTags.filter((tag) => !appliedTags.includes(tag)).sort()
-    return [...applied, ...notApplied]
-  }
+    const applied = availableTags.filter((tag) => appliedTags.includes(tag));
+    const notApplied = availableTags
+      .filter((tag) => !appliedTags.includes(tag))
+      .sort();
+    return [...applied, ...notApplied];
+  };
 
   const getFilteredTags = (searchQuery: string) => {
-    return availableTags.filter((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-  }
+    return availableTags.filter((tag) =>
+      tag.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
 
   const renderTags = (tags: string[], maxWidth = 200) => {
     if (tags.length === 0) {
-      return <span className="text-xs text-sky-600">Add tags...</span>
+      return <span className="text-xs text-sky-600">Add tags...</span>;
     }
 
-    const visibleTags = []
-    let currentWidth = 0
-    const tagPadding = 16 // approximate padding for each tag
-    const ellipsisWidth = 20 // approximate width for "..."
+    const visibleTags = [];
+    let currentWidth = 0;
+    const tagPadding = 16; // approximate padding for each tag
+    const ellipsisWidth = 20; // approximate width for "..."
 
     for (let i = 0; i < tags.length; i++) {
-      const tagWidth = tags[i].length * 7 + tagPadding // approximate character width
-      if (currentWidth + tagWidth + (i < tags.length - 1 ? ellipsisWidth : 0) <= maxWidth) {
-        visibleTags.push(tags[i])
-        currentWidth += tagWidth + 4 // 4px gap between tags
+      const tagWidth = tags[i].length * 7 + tagPadding; // approximate character width
+      if (
+        currentWidth + tagWidth + (i < tags.length - 1 ? ellipsisWidth : 0) <=
+        maxWidth
+      ) {
+        visibleTags.push(tags[i]);
+        currentWidth += tagWidth + 4; // 4px gap between tags
       } else {
-        break
+        break;
       }
     }
 
     return (
       <>
         {visibleTags.map((tag, index) => (
-          <Badge key={index} variant="secondary" className="text-xs bg-sky-200 text-sky-800 hover:bg-sky-300">
+          <Badge
+            key={index}
+            variant="secondary"
+            className="text-xs bg-sky-200 text-sky-800 hover:bg-sky-300"
+          >
             {tag}
           </Badge>
         ))}
-        {visibleTags.length < tags.length && <span className="text-xs text-sky-600 font-medium">...</span>}
+        {visibleTags.length < tags.length && (
+          <span className="text-xs text-sky-600 font-medium">...</span>
+        )}
       </>
-    )
-  }
+    );
+  };
 
-  const allItemsCategory = categories.find((cat) => cat.value === "all")
-  const otherCategories = categories.filter((cat) => cat.value !== "all")
+  const allItemsCategory = categories.find((cat) => cat.value === "all");
+  const otherCategories = categories.filter((cat) => cat.value !== "all");
 
   const handleEditNotes = (passwordId: string, currentNotes: string) => {
-    setEditingNotes({ id: passwordId, content: currentNotes })
-    setShowNotesModal(true)
-  }
+    setEditingNotes({ id: passwordId, content: currentNotes });
+    setShowNotesModal(true);
+  };
 
   const handleSaveNotes = () => {
     // This would update the password's notes in a real app
-    console.log(`Saving notes for password ${editingNotes.id}:`, editingNotes.content)
-    setShowNotesModal(false)
-    setEditingNotes({ id: "", content: "" })
-  }
+    console.log(
+      `Saving notes for password ${editingNotes.id}:`,
+      editingNotes.content
+    );
+    setShowNotesModal(false);
+    setEditingNotes({ id: "", content: "" });
+  };
 
   const generatePassword = () => {
-    const { length, alphabets, numbers, symbols, complexity, useRandom } = passwordOptions
+    const { length, alphabets, numbers, symbols, complexity, useRandom } =
+      passwordOptions;
 
     if (useRandom) {
       // Random generation
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?"
-      let result = ""
+      const chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
+      let result = "";
       for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length))
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
       }
-      setGeneratedPassword(result)
-      return
+      setGeneratedPassword(result);
+      return;
     }
 
     // Custom generation based on specified counts
-    const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    const lowerCase = "abcdefghijklmnopqrstuvwxyz"
-    const nums = "0123456789"
-    const syms = complexity === "high" ? "!@#$%^&*()_+-=[]{}|;:,.<>?" : "!@#$%^&*"
+    const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowerCase = "abcdefghijklmnopqrstuvwxyz";
+    const nums = "0123456789";
+    const syms =
+      complexity === "high" ? "!@#$%^&*()_+-=[]{}|;:,.<>?" : "!@#$%^&*";
 
-    let password = ""
+    let password = "";
 
     // Add required alphabets
     for (let i = 0; i < Math.floor(alphabets / 2); i++) {
-      password += upperCase.charAt(Math.floor(Math.random() * upperCase.length))
+      password += upperCase.charAt(
+        Math.floor(Math.random() * upperCase.length)
+      );
     }
     for (let i = 0; i < Math.ceil(alphabets / 2); i++) {
-      password += lowerCase.charAt(Math.floor(Math.random() * lowerCase.length))
+      password += lowerCase.charAt(
+        Math.floor(Math.random() * lowerCase.length)
+      );
     }
 
     // Add required numbers
     for (let i = 0; i < numbers; i++) {
-      password += nums.charAt(Math.floor(Math.random() * nums.length))
+      password += nums.charAt(Math.floor(Math.random() * nums.length));
     }
 
     // Add required symbols
     for (let i = 0; i < symbols; i++) {
-      password += syms.charAt(Math.floor(Math.random() * syms.length))
+      password += syms.charAt(Math.floor(Math.random() * syms.length));
     }
 
     // Fill remaining length with random characters
-    const allChars = upperCase + lowerCase + nums + syms
+    const allChars = upperCase + lowerCase + nums + syms;
     while (password.length < length) {
-      password += allChars.charAt(Math.floor(Math.random() * allChars.length))
+      password += allChars.charAt(Math.floor(Math.random() * allChars.length));
     }
 
     // Shuffle the password
     const shuffled = password
       .split("")
       .sort(() => Math.random() - 0.5)
-      .join("")
-    setGeneratedPassword(shuffled)
-  }
+      .join("");
+    setGeneratedPassword(shuffled);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-white">
@@ -362,8 +513,10 @@ export default function Component() {
                   <Shield className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900">VaultWeb3</h1>
-                  <p className="text-sm text-sky-600">Decentralized Password Manager</p>
+                  <h1 className="text-xl font-bold text-gray-900">Je-Sui</h1>
+                  <p className="text-sm text-sky-600">
+                    Decentralized Password Manager
+                  </p>
                 </div>
               </div>
 
@@ -380,8 +533,8 @@ export default function Component() {
                 <Button
                   variant={showFavorites ? "default" : "outline"}
                   onClick={() => {
-                    setShowFavorites(!showFavorites)
-                    setSelectedCategory("all")
+                    setShowFavorites(!showFavorites);
+                    setSelectedCategory("all");
                   }}
                   className={
                     showFavorites
@@ -389,24 +542,36 @@ export default function Component() {
                       : "border-pink-200 text-pink-700 hover:bg-pink-50"
                   }
                 >
-                  <Heart className={`w-4 h-4 mr-2 ${showFavorites ? "fill-current" : ""}`} />
+                  <Heart
+                    className={`w-4 h-4 mr-2 ${
+                      showFavorites ? "fill-current" : ""
+                    }`}
+                  />
                   Favorites
                 </Button>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              <Badge variant="outline" className="border-sky-200 text-sky-700 bg-sky-50">
+              <Badge
+                variant="outline"
+                className="border-sky-200 text-sky-700 bg-sky-50"
+              >
                 <Wallet className="w-3 h-3 mr-1" />
                 Connected
               </Badge>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Button
+                    variant="ghost"
+                    className="relative h-10 w-10 rounded-full"
+                  >
                     <Avatar className="h-10 w-10">
                       <AvatarImage src="/placeholder.svg?height=40&width=40" />
-                      <AvatarFallback className="bg-sky-100 text-sky-700">JD</AvatarFallback>
+                      <AvatarFallback className="bg-sky-100 text-sky-700">
+                        JD
+                      </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
@@ -435,7 +600,9 @@ export default function Component() {
               {/* Quick Actions */}
               <Card className="border-sky-100 shadow-sm">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg text-gray-900">Quick Actions</CardTitle>
+                  <CardTitle className="text-lg text-gray-900">
+                    Quick Actions
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button
@@ -461,7 +628,9 @@ export default function Component() {
               <Card className="border-sky-100 shadow-sm">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg text-gray-900">Categories</CardTitle>
+                    <CardTitle className="text-lg text-gray-900">
+                      Categories
+                    </CardTitle>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -476,8 +645,8 @@ export default function Component() {
                   {allItemsCategory && (
                     <button
                       onClick={() => {
-                        setSelectedCategory("all")
-                        setShowFavorites(false)
+                        setSelectedCategory("all");
+                        setShowFavorites(false);
                       }}
                       className={`w-full flex items-center justify-between p-3 rounded-lg text-left transition-colors mt-3 ${
                         selectedCategory === "all" && !showFavorites
@@ -487,23 +656,31 @@ export default function Component() {
                     >
                       <div className="flex items-center gap-2">
                         <span className="text-lg">{allItemsCategory.icon}</span>
-                        <span className="font-medium">{allItemsCategory.label}</span>
+                        <span className="font-medium">
+                          {allItemsCategory.label}
+                        </span>
                       </div>
-                      <Badge variant="secondary" className="bg-gray-100 text-gray-600">
+                      <Badge
+                        variant="secondary"
+                        className="bg-gray-100 text-gray-600"
+                      >
                         {allItemsCategory.count}
                       </Badge>
                     </button>
                   )}
                 </CardHeader>
-                <CardContent className="cursor-pointer" onClick={() => setShowCategoriesModal(true)}>
+                <CardContent
+                  className="cursor-pointer"
+                  onClick={() => setShowCategoriesModal(true)}
+                >
                   <div className="max-h-48 overflow-y-auto space-y-2 pr-2">
                     {otherCategories.slice(0, 7).map((category) => (
                       <button
                         key={category.value}
                         onClick={(e) => {
-                          e.stopPropagation()
-                          setSelectedCategory(category.value)
-                          setShowFavorites(false)
+                          e.stopPropagation();
+                          setSelectedCategory(category.value);
+                          setShowFavorites(false);
                         }}
                         className={`w-full flex items-center justify-between p-3 rounded-lg text-left transition-colors ${
                           selectedCategory === category.value && !showFavorites
@@ -515,14 +692,19 @@ export default function Component() {
                           <span className="text-lg">{category.icon}</span>
                           <span className="font-medium">{category.label}</span>
                         </div>
-                        <Badge variant="secondary" className="bg-gray-100 text-gray-600">
+                        <Badge
+                          variant="secondary"
+                          className="bg-gray-100 text-gray-600"
+                        >
                           {category.count}
                         </Badge>
                       </button>
                     ))}
                     {otherCategories.length > 7 && (
                       <div className="text-center py-2">
-                        <span className="text-sm text-sky-600">Click to view all categories</span>
+                        <span className="text-sm text-sky-600">
+                          Click to view all categories
+                        </span>
                       </div>
                     )}
                   </div>
@@ -530,13 +712,18 @@ export default function Component() {
               </Card>
 
               {/* Categories Modal */}
-              <Dialog open={showCategoriesModal} onOpenChange={setShowCategoriesModal}>
+              <Dialog
+                open={showCategoriesModal}
+                onOpenChange={setShowCategoriesModal}
+              >
                 <DialogContent className="sm:max-w-2xl">
                   <DialogHeader>
                     <div className="flex items-center justify-between">
                       <div>
                         <DialogTitle>Select Category</DialogTitle>
-                        <DialogDescription>Choose a category to filter your passwords</DialogDescription>
+                        <DialogDescription>
+                          Choose a category to filter your passwords
+                        </DialogDescription>
                       </div>
                       <Button
                         onClick={handleAddNewCategory}
@@ -561,7 +748,9 @@ export default function Component() {
                             } ${category.color}`}
                           >
                             <span className="text-2xl">{category.icon}</span>
-                            <span className="text-sm font-medium text-center">{category.label}</span>
+                            <span className="text-sm font-medium text-center">
+                              {category.label}
+                            </span>
                             <Badge variant="secondary" className="text-xs">
                               {category.count}
                             </Badge>
@@ -573,8 +762,11 @@ export default function Component() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleEditCategory(category.value, category.label)
+                                  e.stopPropagation();
+                                  handleEditCategory(
+                                    category.value,
+                                    category.label
+                                  );
                                 }}
                                 className="h-6 w-6 p-0 bg-white/80 hover:bg-white text-gray-600 hover:text-gray-800"
                               >
@@ -584,8 +776,8 @@ export default function Component() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleDeleteCategory(category.value)
+                                  e.stopPropagation();
+                                  handleDeleteCategory(category.value);
                                 }}
                                 className="h-6 w-6 p-0 bg-white/80 hover:bg-white text-red-500 hover:text-red-700"
                               >
@@ -613,8 +805,8 @@ export default function Component() {
                         <Button
                           variant="outline"
                           onClick={() => {
-                            setEditingCategory(null)
-                            setEditCategoryName("")
+                            setEditingCategory(null);
+                            setEditCategoryName("");
                           }}
                           size="sm"
                         >
@@ -627,14 +819,18 @@ export default function Component() {
               </Dialog>
 
               {/* Add Password Modal */}
-              <Dialog open={showAddPasswordModal} onOpenChange={setShowAddPasswordModal}>
+              <Dialog
+                open={showAddPasswordModal}
+                onOpenChange={setShowAddPasswordModal}
+              >
                 <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
                   <DialogHeader>
                     <DialogTitle className="text-2xl font-bold text-center text-gray-900">
                       ✨ Add New Password ✨
                     </DialogTitle>
                     <DialogDescription className="text-center text-gray-600">
-                      Fill in the cute cards below to save your password securely!
+                      Fill in the cute cards below to save your password
+                      securely!
                     </DialogDescription>
                   </DialogHeader>
 
@@ -651,7 +847,12 @@ export default function Component() {
                           <Input
                             placeholder="e.g., MetaMask"
                             value={newPasswordData.name}
-                            onChange={(e) => setNewPasswordData((prev) => ({ ...prev, name: e.target.value }))}
+                            onChange={(e) =>
+                              setNewPasswordData((prev) => ({
+                                ...prev,
+                                name: e.target.value,
+                              }))
+                            }
                             className="border-pink-200 focus:border-pink-400 bg-white/80"
                           />
                         </CardContent>
@@ -669,7 +870,12 @@ export default function Component() {
                             type="password"
                             placeholder="Enter password"
                             value={newPasswordData.password}
-                            onChange={(e) => setNewPasswordData((prev) => ({ ...prev, password: e.target.value }))}
+                            onChange={(e) =>
+                              setNewPasswordData((prev) => ({
+                                ...prev,
+                                password: e.target.value,
+                              }))
+                            }
                             className="border-purple-200 focus:border-purple-400 bg-white/80"
                           />
                         </CardContent>
@@ -686,7 +892,12 @@ export default function Component() {
                           <Input
                             placeholder="username@example.com"
                             value={newPasswordData.username}
-                            onChange={(e) => setNewPasswordData((prev) => ({ ...prev, username: e.target.value }))}
+                            onChange={(e) =>
+                              setNewPasswordData((prev) => ({
+                                ...prev,
+                                username: e.target.value,
+                              }))
+                            }
                             className="border-blue-200 focus:border-blue-400 bg-white/80"
                           />
                         </CardContent>
@@ -703,7 +914,12 @@ export default function Component() {
                           <Input
                             placeholder="https://example.com"
                             value={newPasswordData.url}
-                            onChange={(e) => setNewPasswordData((prev) => ({ ...prev, url: e.target.value }))}
+                            onChange={(e) =>
+                              setNewPasswordData((prev) => ({
+                                ...prev,
+                                url: e.target.value,
+                              }))
+                            }
                             className="border-green-200 focus:border-green-400 bg-white/80"
                           />
                         </CardContent>
@@ -723,7 +939,9 @@ export default function Component() {
                               <Input
                                 placeholder="Search tags..."
                                 value={tagSearchQuery}
-                                onChange={(e) => setTagSearchQuery(e.target.value)}
+                                onChange={(e) =>
+                                  setTagSearchQuery(e.target.value)
+                                }
                                 className="pl-10 border-yellow-200 focus:border-yellow-400 bg-white/80"
                               />
                             </div>
@@ -732,7 +950,9 @@ export default function Component() {
                               {getFilteredTags(tagSearchQuery).map((tag) => (
                                 <div
                                   key={tag}
-                                  onClick={() => handleNewPasswordTagToggle(tag)}
+                                  onClick={() =>
+                                    handleNewPasswordTagToggle(tag)
+                                  }
                                   className={`flex items-center justify-between p-2 rounded cursor-pointer text-sm transition-colors ${
                                     newPasswordData.tags.includes(tag)
                                       ? "bg-yellow-200 text-yellow-800 border border-yellow-300"
@@ -757,7 +977,9 @@ export default function Component() {
                                   >
                                     {tag}
                                     <button
-                                      onClick={() => handleNewPasswordTagToggle(tag)}
+                                      onClick={() =>
+                                        handleNewPasswordTagToggle(tag)
+                                      }
                                       className="ml-1 hover:text-yellow-900"
                                     >
                                       <X className="w-3 h-3" />
@@ -781,13 +1003,18 @@ export default function Component() {
                           <Textarea
                             placeholder="Add any additional notes here... (e.g., recovery phrases, account numbers, security questions, etc.)"
                             value={newPasswordData.notes}
-                            onChange={(e) => setNewPasswordData((prev) => ({ ...prev, notes: e.target.value }))}
+                            onChange={(e) =>
+                              setNewPasswordData((prev) => ({
+                                ...prev,
+                                notes: e.target.value,
+                              }))
+                            }
                             className="border-indigo-200 focus:border-indigo-400 bg-white/80 min-h-[100px] resize-none"
                             rows={4}
                           />
                           <p className="text-xs text-indigo-600 mt-2">
-                            💡 Tip: Store recovery phrases, account numbers, or any other important details securely
-                            here.
+                            💡 Tip: Store recovery phrases, account numbers, or
+                            any other important details securely here.
                           </p>
                         </CardContent>
                       </Card>
@@ -805,8 +1032,8 @@ export default function Component() {
                     <Button
                       onClick={() => {
                         // Handle save logic here
-                        console.log("Saving password:", newPasswordData)
-                        setShowAddPasswordModal(false)
+                        console.log("Saving password:", newPasswordData);
+                        setShowAddPasswordModal(false);
                         // Reset form
                         setNewPasswordData({
                           name: "",
@@ -816,7 +1043,7 @@ export default function Component() {
                           category: "",
                           tags: [],
                           notes: "",
-                        })
+                        });
                       }}
                       className="bg-gradient-to-r from-sky-500 to-purple-500 hover:from-sky-600 hover:to-purple-600 text-white px-8"
                     >
@@ -830,20 +1057,30 @@ export default function Component() {
               <Dialog open={showNotesModal} onOpenChange={setShowNotesModal}>
                 <DialogContent className="sm:max-w-2xl">
                   <DialogHeader>
-                    <DialogTitle className="text-xl font-bold text-gray-900">📝 Edit Notes</DialogTitle>
-                    <DialogDescription>Update the notes for this password entry</DialogDescription>
+                    <DialogTitle className="text-xl font-bold text-gray-900">
+                      📝 Edit Notes
+                    </DialogTitle>
+                    <DialogDescription>
+                      Update the notes for this password entry
+                    </DialogDescription>
                   </DialogHeader>
 
                   <div className="space-y-4">
                     <Textarea
                       value={editingNotes.content}
-                      onChange={(e) => setEditingNotes((prev) => ({ ...prev, content: e.target.value }))}
+                      onChange={(e) =>
+                        setEditingNotes((prev) => ({
+                          ...prev,
+                          content: e.target.value,
+                        }))
+                      }
                       placeholder="Add any additional notes here... (e.g., recovery phrases, account numbers, security questions, etc.)"
                       className="min-h-[200px] resize-none"
                       rows={8}
                     />
                     <p className="text-xs text-gray-500">
-                      💡 Tip: Store recovery phrases, account numbers, or any other important details securely here.
+                      💡 Tip: Store recovery phrases, account numbers, or any
+                      other important details securely here.
                     </p>
                   </div>
 
@@ -851,13 +1088,16 @@ export default function Component() {
                     <Button
                       variant="outline"
                       onClick={() => {
-                        setShowNotesModal(false)
-                        setEditingNotes({ id: "", content: "" })
+                        setShowNotesModal(false);
+                        setEditingNotes({ id: "", content: "" });
                       }}
                     >
                       Cancel
                     </Button>
-                    <Button onClick={handleSaveNotes} className="bg-sky-500 hover:bg-sky-600 text-white">
+                    <Button
+                      onClick={handleSaveNotes}
+                      className="bg-sky-500 hover:bg-sky-600 text-white"
+                    >
                       Save Notes
                     </Button>
                   </div>
@@ -865,14 +1105,18 @@ export default function Component() {
               </Dialog>
 
               {/* Password Generator Modal */}
-              <Dialog open={showPasswordGeneratorModal} onOpenChange={setShowPasswordGeneratorModal}>
+              <Dialog
+                open={showPasswordGeneratorModal}
+                onOpenChange={setShowPasswordGeneratorModal}
+              >
                 <DialogContent className="sm:max-w-3xl">
                   <DialogHeader>
                     <DialogTitle className="text-2xl font-bold text-center text-gray-900">
                       ⚡ Password Generator ⚡
                     </DialogTitle>
                     <DialogDescription className="text-center text-gray-600">
-                      Customize your password settings and generate a secure password
+                      Customize your password settings and generate a secure
+                      password
                     </DialogDescription>
                   </DialogHeader>
 
@@ -882,7 +1126,9 @@ export default function Component() {
                       <div className="mb-6 p-4 bg-sky-50 border border-sky-200 rounded-lg">
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
-                            <Label className="text-sm font-medium text-sky-700">Generated Password:</Label>
+                            <Label className="text-sm font-medium text-sky-700">
+                              Generated Password:
+                            </Label>
                             <div className="mt-1 p-2 bg-white border border-sky-200 rounded font-mono text-sm break-all">
                               {generatedPassword}
                             </div>
@@ -914,7 +1160,9 @@ export default function Component() {
                       {/* Top Row */}
                       <Card className="bg-gradient-to-br from-pink-50 to-pink-100 border-pink-200">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm font-semibold text-pink-700">🔤 Alphabets</CardTitle>
+                          <CardTitle className="text-sm font-semibold text-pink-700">
+                            🔤 Alphabets
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
                           <Input
@@ -935,7 +1183,9 @@ export default function Component() {
 
                       <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm font-semibold text-blue-700">📏 Length</CardTitle>
+                          <CardTitle className="text-sm font-semibold text-blue-700">
+                            📏 Length
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
                           <Input
@@ -956,7 +1206,9 @@ export default function Component() {
 
                       <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm font-semibold text-green-700">🔢 Numbers</CardTitle>
+                          <CardTitle className="text-sm font-semibold text-green-700">
+                            🔢 Numbers
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
                           <Input
@@ -978,7 +1230,9 @@ export default function Component() {
                       {/* Bottom Row */}
                       <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm font-semibold text-orange-700">🎯 Complexity</CardTitle>
+                          <CardTitle className="text-sm font-semibold text-orange-700">
+                            🎯 Complexity
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
                           <Select
@@ -1004,11 +1258,15 @@ export default function Component() {
 
                       <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm font-semibold text-purple-700">🎲 Random</CardTitle>
+                          <CardTitle className="text-sm font-semibold text-purple-700">
+                            🎲 Random
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
                           <Button
-                            variant={passwordOptions.useRandom ? "default" : "outline"}
+                            variant={
+                              passwordOptions.useRandom ? "default" : "outline"
+                            }
                             onClick={() =>
                               setPasswordOptions((prev) => ({
                                 ...prev,
@@ -1028,7 +1286,9 @@ export default function Component() {
 
                       <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm font-semibold text-yellow-700">🔣 Symbols</CardTitle>
+                          <CardTitle className="text-sm font-semibold text-yellow-700">
+                            🔣 Symbols
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
                           <Input
@@ -1053,7 +1313,15 @@ export default function Component() {
                       <p className="text-sm text-gray-500">
                         {passwordOptions.useRandom
                           ? "Random mode: All character types will be mixed randomly"
-                          : `Custom mode: ${passwordOptions.alphabets} letters + ${passwordOptions.numbers} numbers + ${passwordOptions.symbols} symbols = ${passwordOptions.alphabets + passwordOptions.numbers + passwordOptions.symbols} chars (Target: ${passwordOptions.length})`}
+                          : `Custom mode: ${
+                              passwordOptions.alphabets
+                            } letters + ${passwordOptions.numbers} numbers + ${
+                              passwordOptions.symbols
+                            } symbols = ${
+                              passwordOptions.alphabets +
+                              passwordOptions.numbers +
+                              passwordOptions.symbols
+                            } chars (Target: ${passwordOptions.length})`}
                       </p>
                     </div>
                   </div>
@@ -1062,8 +1330,8 @@ export default function Component() {
                     <Button
                       variant="outline"
                       onClick={() => {
-                        setShowPasswordGeneratorModal(false)
-                        setGeneratedPassword("")
+                        setShowPasswordGeneratorModal(false);
+                        setGeneratedPassword("");
                       }}
                       className="border-gray-300 text-gray-700 hover:bg-gray-50"
                     >
@@ -1072,7 +1340,7 @@ export default function Component() {
                     <Button
                       onClick={() => {
                         if (generatedPassword) {
-                          copyToClipboard(generatedPassword)
+                          copyToClipboard(generatedPassword);
                         }
                       }}
                       disabled={!generatedPassword}
@@ -1092,8 +1360,14 @@ export default function Component() {
               {/* Password List */}
               <div className="h-[calc(100vh-200px)] overflow-y-auto space-y-4 pr-2">
                 {filteredPasswords.map((password) => (
-                  <Card key={password.id} className="border-sky-100 shadow-sm hover:shadow-md transition-shadow">
-                    <CardContent className="p-4" onClick={() => setOpenTagDropdown(null)}>
+                  <Card
+                    key={password.id}
+                    className="border-sky-100 shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <CardContent
+                      className="p-4"
+                      onClick={() => setOpenTagDropdown(null)}
+                    >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4 flex-1">
                           <div className="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center text-2xl">
@@ -1102,7 +1376,9 @@ export default function Component() {
 
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-semibold text-gray-900 truncate">{password.name}</h3>
+                              <h3 className="font-semibold text-gray-900 truncate">
+                                {password.name}
+                              </h3>
                               <Badge
                                 variant="outline"
                                 className={`text-xs ${
@@ -1116,12 +1392,19 @@ export default function Component() {
                               <div className="relative ml-2">
                                 <div
                                   onClick={(e) => {
-                                    e.stopPropagation()
-                                    setOpenTagDropdown(openTagDropdown === password.id ? null : password.id)
+                                    e.stopPropagation();
+                                    setOpenTagDropdown(
+                                      openTagDropdown === password.id
+                                        ? null
+                                        : password.id
+                                    );
                                   }}
                                   className="flex flex-wrap gap-1 p-2 bg-sky-50 border border-sky-200 rounded-lg cursor-pointer hover:bg-sky-100 transition-colors"
                                   style={{
-                                    minWidth: password.tags.length === 0 ? "80px" : "auto",
+                                    minWidth:
+                                      password.tags.length === 0
+                                        ? "80px"
+                                        : "auto",
                                     maxWidth: "200px",
                                     minHeight: "36px",
                                   }}
@@ -1137,25 +1420,30 @@ export default function Component() {
                                         className="mb-2 text-sm border-sky-200 focus:border-sky-400"
                                       />
                                       <div className="max-h-32 overflow-y-auto space-y-1">
-                                        {getSortedTags(password.tags).map((tag) => (
-                                          <div
-                                            key={tag}
-                                            onClick={(e) => {
-                                              e.stopPropagation()
-                                              handleTagToggle(password.id, tag)
-                                            }}
-                                            className={`flex items-center justify-between p-2 rounded cursor-pointer text-sm ${
-                                              password.tags.includes(tag)
-                                                ? "bg-sky-100 text-sky-800"
-                                                : "hover:bg-gray-50 text-gray-700"
-                                            }`}
-                                          >
-                                            <span>{tag}</span>
-                                            {password.tags.includes(tag) && (
-                                              <div className="w-2 h-2 bg-sky-500 rounded-full"></div>
-                                            )}
-                                          </div>
-                                        ))}
+                                        {getSortedTags(password.tags).map(
+                                          (tag) => (
+                                            <div
+                                              key={tag}
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleTagToggle(
+                                                  password.id,
+                                                  tag
+                                                );
+                                              }}
+                                              className={`flex items-center justify-between p-2 rounded cursor-pointer text-sm ${
+                                                password.tags.includes(tag)
+                                                  ? "bg-sky-100 text-sky-800"
+                                                  : "hover:bg-gray-50 text-gray-700"
+                                              }`}
+                                            >
+                                              <span>{tag}</span>
+                                              {password.tags.includes(tag) && (
+                                                <div className="w-2 h-2 bg-sky-500 rounded-full"></div>
+                                              )}
+                                            </div>
+                                          )
+                                        )}
                                       </div>
                                     </div>
                                   </div>
@@ -1170,18 +1458,26 @@ export default function Component() {
                                     : "text-gray-400 hover:text-pink-500"
                                 }`}
                               >
-                                <Star className={`w-4 h-4 ${password.isFavorite ? "fill-current" : ""}`} />
+                                <Star
+                                  className={`w-4 h-4 ${
+                                    password.isFavorite ? "fill-current" : ""
+                                  }`}
+                                />
                               </Button>
                             </div>
 
                             <div className="space-y-1">
                               <div className="flex items-center gap-2">
                                 <div className="flex items-center gap-1">
-                                  <span className="text-sm text-gray-500">Username:</span>
+                                  <span className="text-sm text-gray-500">
+                                    Username:
+                                  </span>
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => copyToClipboard(password.username)}
+                                    onClick={() =>
+                                      copyToClipboard(password.username)
+                                    }
                                     className="h-5 w-5 p-0 text-sky-600 hover:text-sky-700 hover:bg-sky-50"
                                   >
                                     <Copy className="w-3 h-3" />
@@ -1194,23 +1490,31 @@ export default function Component() {
 
                               <div className="flex items-center gap-2">
                                 <div className="flex items-center gap-1">
-                                  <span className="text-sm text-gray-500">Password:</span>
+                                  <span className="text-sm text-gray-500">
+                                    Password:
+                                  </span>
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => copyToClipboard(password.password)}
+                                    onClick={() =>
+                                      copyToClipboard(password.password)
+                                    }
                                     className="h-5 w-5 p-0 text-sky-600 hover:text-sky-700 hover:bg-sky-50"
                                   >
                                     <Copy className="w-3 h-3" />
                                   </Button>
                                 </div>
                                 <span className="text-sm text-gray-900 font-mono flex-1">
-                                  {showPassword[password.id] ? password.password : "••••••••••••"}
+                                  {showPassword[password.id]
+                                    ? password.password
+                                    : "••••••••••••"}
                                 </span>
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  onClick={() => togglePasswordVisibility(password.id)}
+                                  onClick={() =>
+                                    togglePasswordVisibility(password.id)
+                                  }
                                   className="h-5 w-5 p-0 text-sky-600 hover:text-sky-700 hover:bg-sky-50"
                                 >
                                   {showPassword[password.id] ? (
@@ -1233,25 +1537,34 @@ export default function Component() {
                                     {password.url}
                                   </a>
                                 </div>
-                                <span className="text-xs text-gray-500">Last used {password.lastUsed}</span>
+                                <span className="text-xs text-gray-500">
+                                  Last used {password.lastUsed}
+                                </span>
                               </div>
 
                               {password.notes && (
                                 <div
                                   className="mt-2 p-2 bg-gray-50 rounded-md border cursor-pointer hover:bg-gray-100 transition-colors"
                                   onClick={(e) => {
-                                    e.stopPropagation()
-                                    handleEditNotes(password.id, password.notes)
+                                    e.stopPropagation();
+                                    handleEditNotes(
+                                      password.id,
+                                      password.notes
+                                    );
                                   }}
                                 >
                                   <div className="flex items-start gap-2">
-                                    <span className="text-sm text-gray-500 font-medium">Notes:</span>
+                                    <span className="text-sm text-gray-500 font-medium">
+                                      Notes:
+                                    </span>
                                     <Edit className="w-3 h-3 text-gray-400 ml-auto" />
                                   </div>
                                   <p className="text-sm text-gray-700 mt-1 whitespace-pre-wrap line-clamp-3">
                                     {password.notes}
                                   </p>
-                                  <p className="text-xs text-gray-400 mt-1">Click to edit notes</p>
+                                  <p className="text-xs text-gray-400 mt-1">
+                                    Click to edit notes
+                                  </p>
                                 </div>
                               )}
                             </div>
@@ -1261,7 +1574,11 @@ export default function Component() {
                         <div className="flex items-center gap-2 ml-4">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-gray-400 hover:text-gray-600"
+                              >
                                 <MoreVertical className="w-4 h-4" />
                               </Button>
                             </DropdownMenuTrigger>
@@ -1269,7 +1586,9 @@ export default function Component() {
                               <DropdownMenuItem>Edit</DropdownMenuItem>
                               <DropdownMenuItem>Duplicate</DropdownMenuItem>
                               <DropdownMenuSeparator />
-                              <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+                              <DropdownMenuItem className="text-red-600">
+                                Delete
+                              </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
@@ -1282,14 +1601,16 @@ export default function Component() {
                   <div className="text-center py-12 h-full flex flex-col items-center justify-center">
                     <Key className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
-                      {showFavorites ? "No favorite passwords found" : "No passwords found"}
+                      {showFavorites
+                        ? "No favorite passwords found"
+                        : "No passwords found"}
                     </h3>
                     <p className="text-gray-500 mb-4">
                       {showFavorites
                         ? "Mark some passwords as favorites to see them here"
                         : searchQuery
-                          ? "Try adjusting your search terms"
-                          : "Get started by adding your first password"}
+                        ? "Try adjusting your search terms"
+                        : "Get started by adding your first password"}
                     </p>
                     <Button
                       onClick={() => setShowAddPasswordModal(true)}
@@ -1317,7 +1638,9 @@ export default function Component() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
                 <div>
-                  <p className="text-sm text-green-600 font-medium">Vault Health</p>
+                  <p className="text-sm text-green-600 font-medium">
+                    Vault Health
+                  </p>
                   <p className="text-2xl font-bold text-green-700">Excellent</p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -1327,7 +1650,9 @@ export default function Component() {
 
               <div className="flex items-center justify-between p-4 bg-orange-50 rounded-lg border border-orange-200">
                 <div>
-                  <p className="text-sm text-orange-600 font-medium">Weak Passwords</p>
+                  <p className="text-sm text-orange-600 font-medium">
+                    Weak Passwords
+                  </p>
                   <p className="text-2xl font-bold text-orange-700">1</p>
                 </div>
                 <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
@@ -1337,7 +1662,9 @@ export default function Component() {
 
               <div className="flex items-center justify-between p-4 bg-sky-50 rounded-lg border border-sky-200">
                 <div>
-                  <p className="text-sm text-sky-600 font-medium">Total Passwords</p>
+                  <p className="text-sm text-sky-600 font-medium">
+                    Total Passwords
+                  </p>
                   <p className="text-2xl font-bold text-sky-700">4</p>
                 </div>
                 <div className="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center">
@@ -1347,7 +1674,9 @@ export default function Component() {
 
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Duplicates</p>
+                  <p className="text-sm text-gray-600 font-medium">
+                    Duplicates
+                  </p>
                   <p className="text-2xl font-bold text-gray-700">0</p>
                 </div>
                 <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
@@ -1359,5 +1688,5 @@ export default function Component() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
