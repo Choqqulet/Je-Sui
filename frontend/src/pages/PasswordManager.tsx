@@ -56,6 +56,7 @@ import {
   Trash2,
   Heart,
 } from "lucide-react";
+import logo from "../assets/logo.jpg";
 
 export default function Component() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -509,9 +510,11 @@ export default function Component() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-sky-400 to-sky-600 rounded-xl flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-white" />
-                </div>
+                <img
+                  src={logo}
+                  alt="Je-Sui"
+                  className="w-10 h-10 rounded-xl object-contain"
+                />
                 <div>
                   <h1 className="text-xl font-bold text-gray-900">Je-Sui</h1>
                   <p className="text-sm text-sky-600">
