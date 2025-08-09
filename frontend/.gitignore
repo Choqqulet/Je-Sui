@@ -43,3 +43,8 @@ coverage/
 src/**/*.js
 src/**/*.js.map
 src/**/*.d.ts.map
+
+# Ignore compiled/transpiled JS in src
+src/**/*.js
+src/**/*.js.map
+src/**/*.d.ts.map
