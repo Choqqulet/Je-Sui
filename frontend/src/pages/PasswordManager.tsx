@@ -57,8 +57,21 @@ import {
   Heart,
 } from "lucide-react";
 import logo from "../assets/logo.jpg";
+import Connect from "../wallet/Connects";
+import {
+  useCurrentAccount,
+  useSignAndExecuteTransaction,
+} from "@mysten/dapp-kit";
+import { Transaction } from "@mysten/sui/transactions";
 
 export default function Component() {
+  const account = useCurrentAccount();
+  const { mutateAsync: signAndExecuteTransaction } =
+    useSignAndExecuteTransaction();
+  const PLATFORM_ADDRESS =
+    (import.meta.env.VITE_SUPPORT_ADDRESS as string) || "";
+  const [isSendingSupport, setIsSendingSupport] = useState(false);
+  const [supportAmount, setSupportAmount] = useState("0.1");
   const [searchQuery, setSearchQuery] = useState("");
   const [showPassword, setShowPassword] = useState<{ [key: string]: boolean }>(
     {}
@@ -309,6 +322,33 @@ export default function Component() {
     navigator.clipboard.writeText(text);
   };
 
+  const sendSupport = async () => {
+    if (!account?.address) {
+      alert("Please connect a Sui wallet first.");
+      return;
+    }
+    if (!PLATFORM_ADDRESS) {
+      alert("Missing VITE_SUPPORT_ADDRESS in .env.");
+      return;
+    }
+    try {
+      setIsSendingSupport(true);
+      const txb = new Transaction();
+      const amountMisto = BigInt(
+        Math.floor(Number(supportAmount) * 1_000_000_000)
+      );
+      const [coin] = txb.splitCoins(txb.gas, [amountMisto]);
+      txb.transferObjects([coin], PLATFORM_ADDRESS);
+      const res = await signAndExecuteTransaction({ transaction: txb });
+      alert(`Support sent! Digest: ${res.digest || "tx"}`);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to send support. Check console for details.");
+    } finally {
+      setIsSendingSupport(false);
+    }
+  };
+
   const handleTagToggle = (passwordId: string, tag: string) => {
     // This would update the password's tags in a real app
     console.log(`Toggle tag "${tag}" for password ${passwordId}`);
@@ -556,13 +596,7 @@ export default function Component() {
             </div>
 
             <div className="flex items-center gap-4">
-              <Badge
-                variant="outline"
-                className="border-sky-200 text-sky-700 bg-sky-50"
-              >
-                <Wallet className="w-3 h-3 mr-1" />
-                Connected
-              </Badge>
+              <Connect />
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -584,7 +618,13 @@ export default function Component() {
                     Settings
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      (window as any).dispatchEvent(
+                        new CustomEvent("mysten:wallet:disconnect")
+                      )
+                    }
+                  >
                     <LogOut className="mr-2 h-4 w-4" />
                     Disconnect Wallet
                   </DropdownMenuItem>
@@ -624,6 +664,43 @@ export default function Component() {
                     <Zap className="w-4 h-4 mr-2" />
                     Generate Password
                   </Button>
+                </CardContent>
+              </Card>
+
+              {/* Support the Platform */}
+              <Card className="border-sky-100 shadow-sm">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg text-gray-900 flex items-center gap-2">
+                    <Heart className="w-4 h-4 text-pink-500" /> Support Je-Sui
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="text-sm text-gray-600">
+                    Send a small tip in SUI to support development.
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={supportAmount}
+                      onChange={(e) => setSupportAmount(e.target.value)}
+                      className="w-28"
+                    />
+                    <span className="text-sm text-gray-500">SUI</span>
+                  </div>
+                  <Button
+                    onClick={sendSupport}
+                    disabled={!account?.address || isSendingSupport}
+                    className="w-full bg-pink-500 hover:bg-pink-600 text-white"
+                  >
+                    {isSendingSupport ? "Sending..." : "Send Support"}
+                  </Button>
+                  {!PLATFORM_ADDRESS && (
+                    <div className="text-xs text-red-500">
+                      Set `VITE_SUPPORT_ADDRESS` in your `.env` to enable.
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
