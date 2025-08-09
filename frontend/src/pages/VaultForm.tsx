@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { generateSymmetricKey, encryptJsonWithKey, decryptJsonWithKey } from "../utils/seal";
+import {
+  generateSymmetricKey,
+  encryptJsonWithKey,
+  decryptJsonWithKey,
+} from "../utils/seal";
 import { walrusWrite, walrusReadBytes } from "../utils/walrus";
 
 const te = new TextEncoder();
@@ -36,6 +40,7 @@ export default function VaultForm() {
 
       // Write to Walrus (stub = localStorage; real later)
       const blobId = await walrusWrite(bytes, label);
+
       setStatus(`Saved: ${blobId}`);
 
       // Optional: read back & decrypt to prove round-trip
@@ -59,12 +64,30 @@ export default function VaultForm() {
   }
 
   return (
-    <div style={{ maxWidth: 480, margin: "2rem auto", display: "grid", gap: 8 }}>
+    <div
+      style={{ maxWidth: 480, margin: "2rem auto", display: "grid", gap: 8 }}
+    >
       <h2>Store a Vault Entry</h2>
-      <input placeholder="Label" value={label} onChange={(e) => setLabel(e.target.value)} />
-      <input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-      <input placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <textarea placeholder="Notes" value={notes} onChange={(e) => setNotes(e.target.value)} />
+      <input
+        placeholder="Label"
+        value={label}
+        onChange={(e) => setLabel(e.target.value)}
+      />
+      <input
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <input
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <textarea
+        placeholder="Notes"
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
+      />
       <button onClick={handleSave}>Save</button>
       <div>{status}</div>
     </div>

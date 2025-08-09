@@ -32,3 +32,54 @@ export async function getWalrusBlobId(secret: string, signer: Ed25519Keypair) {
 
   return blobId;
 }
+
+// --- Simple local stub storage for development ---
+const LOCAL_PREFIX = "walrus:";
+const LOCAL_INDEX_KEY = `${LOCAL_PREFIX}index`;
+
+function generateLocalBlobId(label?: string) {
+  const rand = Math.random().toString(36).slice(2, 10);
+  return `local-${Date.now()}-${rand}${label ? `-${label}` : ""}`;
+}
+
+export async function walrusWrite(
+  bytes: Uint8Array,
+  label?: string
+): Promise<string> {
+  try {
+    const blobId = generateLocalBlobId(label);
+    const payload = {
+      label: label ?? null,
+      createdAt: Date.now(),
+      bytes: Array.from(bytes),
+    };
+    localStorage.setItem(`${LOCAL_PREFIX}${blobId}`, JSON.stringify(payload));
+
+    const indexRaw = localStorage.getItem(LOCAL_INDEX_KEY);
+    const index: string[] = indexRaw ? JSON.parse(indexRaw) : [];
+    if (!index.includes(blobId)) {
+      index.push(blobId);
+      localStorage.setItem(LOCAL_INDEX_KEY, JSON.stringify(index));
+    }
+
+    return blobId;
+  } catch (e) {
+    throw new Error(
+      `walrusWrite failed: ${(e as Error)?.message ?? String(e)}`
+    );
+  }
+}
+
+export async function walrusReadBytes(blobId: string): Promise<Uint8Array> {
+  try {
+    const raw = localStorage.getItem(`${LOCAL_PREFIX}${blobId}`);
+    if (!raw) throw new Error("blob not found");
+    const parsed = JSON.parse(raw) as { bytes: number[] };
+    if (!parsed?.bytes) throw new Error("invalid blob format");
+    return new Uint8Array(parsed.bytes);
+  } catch (e) {
+    throw new Error(
+      `walrusReadBytes failed: ${(e as Error)?.message ?? String(e)}`
+    );
+  }
+}
