@@ -1,9 +1,9 @@
+#[test_only]
 module password_manager::vault_test {
     use sui::tx_context::TxContext;
-    use sui::object::UID;
-    use sui::test;
-    use password_manager::vault;
+
     use password_manager::seal;
+    use password_manager::vault;
 
     #[test]
     public entry fun test_update_vault_with_seal(ctx: &mut TxContext) {
@@ -11,17 +11,17 @@ module password_manager::vault_test {
         let blob_id = b"initial_blob";
         let new_blob_id = b"updated_blob";
 
-        // Create vault
-        vault::create_vault(label, blob_id, ctx);
-        let v = test::take_from_address<vault::Vault>(test::sender(ctx));
-
-        // Create seal
+        // 1) Create a seal owned by the test sender
         let s = seal::create_seal(ctx);
 
-        // Update vault using seal
+        // 2) Create a vault with that seal
+        // NOTE: create_vault must RETURN Vault for this to work.
+        let mut v = vault::create_vault(label, blob_id, &s, ctx);
+
+        // 3) Update the vault using the same seal
         vault::update_vault(&mut v, new_blob_id, &s, ctx);
 
-        // Assert blob was updated
-        assert!(v.blob_id == new_blob_id, 100);
+        // 4) Assert via accessor (don’t reach into private fields)
+        assert!(vault::get_blob_id(&v) == new_blob_id, 100);
     }
 }

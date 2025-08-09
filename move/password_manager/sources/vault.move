@@ -1,8 +1,7 @@
 module password_manager::vault {
-    use sui::event;
-    use sui::object::{UID, new};
-    use sui::tx_context::{TxContext, sender};
-    use sui::transfer;
+    use sui::object::UID;
+    use sui::tx_context::TxContext;
+
     use password_manager::seal;
 
     public struct Vault has key, store {
@@ -10,25 +9,42 @@ module password_manager::vault {
         owner: address,
         label: vector<u8>,
         blob_id: vector<u8>,
+        seal_owner: address,
     }
 
-    public entry fun create_vault(label: vector<u8>, blob_id: vector<u8>, ctx: &mut TxContext) {
-        let v = Vault { id: new(ctx), owner: sender(ctx), label, blob_id };
-        transfer::transfer(v, sender(ctx));
+    /// Return the created Vault so tests / callers can mutate & assert on it.
+    public entry fun create_vault(
+        label: vector<u8>,
+        blob_id: vector<u8>,
+        presented_seal: &seal::Seal,
+        ctx: &mut TxContext
+    ): Vault {
+        let sender = sui::tx_context::sender(ctx);
+        // Require caller to own the seal
+        seal::assert_owner(presented_seal, sender);
+
+        Vault {
+            id: sui::object::new(ctx),
+            owner: sender,
+            label,
+            blob_id,
+            seal_owner: sender,
+        }
     }
 
-    public entry fun update_vault(v: &mut Vault, new_blob_id: vector<u8>, s: &seal::Seal, ctx: &TxContext) {
-        seal::assert_owner(s, sender(ctx));
+    public entry fun update_vault(
+        v: &mut Vault,
+        new_blob_id: vector<u8>,
+        presented_seal: &seal::Seal,
+        ctx: &mut TxContext
+    ) {
+        let sender = sui::tx_context::sender(ctx);
+        // Same owner must present their seal
+        assert!(sender == v.owner, 1);
+        seal::assert_owner(presented_seal, sender);
         v.blob_id = new_blob_id;
     }
 
-    // Allow other modules in this package (policy.move) to call this.
-    public(package) fun apply_update(v: &mut Vault, new_blob_id: vector<u8>) {
-        v.blob_id = new_blob_id;
-    }
-
-    // Public getter to avoid reading private field outside this module.
-    public fun owner_of(v: &Vault): address {
-        v.owner
-    }
+    // Accessor for tests / frontend
+    public fun get_blob_id(v: &Vault): vector<u8> { v.blob_id }
 }
