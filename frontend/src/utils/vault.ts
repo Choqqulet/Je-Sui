@@ -1,12 +1,18 @@
 import { Transaction } from "@mysten/sui/transactions";
-import type { Ed25519Keypair } from "@mysten/sui/cryptography";
 import { sui, PACKAGE_ID } from "./suiClient";
+import type { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 
 const enc = new TextEncoder();
 
 export async function createVault({
-  label, blobId, signer,
-}: { label: string; blobId: string; signer: Ed25519Keypair; }) {
+  label,
+  blobId,
+  signer,
+}: {
+  label: string;
+  blobId: string;
+  signer: Ed25519Keypair;
+}) {
   const tx = new Transaction();
   tx.moveCall({
     target: `${PACKAGE_ID}::vault::create_vault`,
@@ -20,8 +26,14 @@ export async function createVault({
 }
 
 export async function updateVault({
-  vaultId, newBlobId, signer,
-}: { vaultId: string; newBlobId: string; signer: Ed25519Keypair }) {
+  vaultId,
+  newBlobId,
+  signer,
+}: {
+  vaultId: string;
+  newBlobId: string;
+  signer: Ed25519Keypair;
+}) {
   const tx = new Transaction();
   tx.moveCall({
     target: `${PACKAGE_ID}::vault::update_vault`,

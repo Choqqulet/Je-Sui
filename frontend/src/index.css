@@ -67,3 +67,5 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Removed global base overrides to avoid conflicts with Tailwind + shadcn */
