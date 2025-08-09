@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { createVault } from "../utils/vault";
-import { createPolicy, proposeUpdate, approveOp, executeOp } from "../utils/policy";
-import { getWalrusBlobId } from "../utils/walrus";
+import {
+  createPolicy,
+  proposeUpdate,
+  approveOp,
+  executeOp,
+} from "../utils/policy";
+
 import { keypairFromZkLogin } from "../utils/auth";
+import { getWalrusBlobId } from "../utils/walrus";
 
 export default function TestFlow() {
   const [status, setStatus] = useState("");
@@ -16,7 +22,11 @@ export default function TestFlow() {
       const blobId = await getWalrusBlobId("mySecretPassword", keypair);
 
       setStatus("Creating vault…");
-      const vaultRes = await createVault({ label: "Gmail", blobId, signer: keypair });
+      const vaultRes = await createVault({
+        label: "Gmail",
+        blobId,
+        signer: keypair,
+      });
       console.log("Vault created:", vaultRes);
 
       const myAddr = address; // for demo you can list yourself as guardian twice
