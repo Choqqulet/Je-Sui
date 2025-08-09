@@ -1,9 +1,11 @@
 import { WalrusClient, WalrusFile } from "@mysten/walrus";
 import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
-import type { Ed25519Keypair } from "@mysten/sui/cryptography";
+import type { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import walrusWasmUrl from "@mysten/walrus-wasm/web/walrus_wasm_bg.wasm?url";
 
-const sui = new SuiClient({ url: getFullnodeUrl(import.meta.env.VITE_SUI_NETWORK || "testnet") });
+const sui = new SuiClient({
+  url: getFullnodeUrl(import.meta.env.VITE_SUI_NETWORK || "testnet"),
+});
 
 export async function getWalrusBlobId(secret: string, signer: Ed25519Keypair) {
   const walrus = new WalrusClient({
@@ -12,12 +14,16 @@ export async function getWalrusBlobId(secret: string, signer: Ed25519Keypair) {
     wasmUrl: walrusWasmUrl,
   });
 
-  const file = WalrusFile.from(
-    JSON.stringify({ password: secret }),
-    { identifier: "credential", tags: { type: "credential" } }
+  const contents = new TextEncoder().encode(
+    JSON.stringify({ password: secret })
   );
+  const file = WalrusFile.from({
+    contents,
+    identifier: "credential",
+    tags: { type: "credential" },
+  });
 
-  const { blobId } = await walrus.writeFiles({
+  const [{ blobId }] = await walrus.writeFiles({
     files: [file],
     epochs: 3,
     deletable: true,

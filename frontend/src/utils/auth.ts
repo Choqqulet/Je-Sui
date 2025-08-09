@@ -1,6 +1,6 @@
 // temporary mock until zkLogin is wired
 
-import { Ed25519Keypair } from "@mysten/sui/cryptography";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 
 export async function keypairFromZkLogin() {
   // TODO: replace with real zkLogin. For now, reuse a local keypair (persisted).
